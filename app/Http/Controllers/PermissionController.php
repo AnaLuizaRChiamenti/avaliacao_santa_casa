@@ -5,12 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Permission;
 use Illuminate\Http\Request;
 
-
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $permissions = Permission::orderBy('name')->get();
@@ -18,51 +14,50 @@ class PermissionController extends Controller
         return view('permissions.index', compact('permissions'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('permissions.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'unique:permissions,slug'],
+        ]);
+
+        Permission::create($data);
+
+        return redirect()
+            ->route('permissions.index')
+            ->with('success', 'Permissão criada com sucesso.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(Permission $permission)
     {
-        //
+        return view('permissions.edit', compact('permission'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, Permission $permission)
     {
-        //
+        $data = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255', 'unique:permissions,slug,' . $permission->id],
+        ]);
+
+        $permission->update($data);
+
+        return redirect()
+            ->route('permissions.index')
+            ->with('success', 'Permissão atualizada com sucesso.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(Permission $permission)
     {
-        //
-    }
+        $permission->delete();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()
+            ->route('permissions.index')
+            ->with('success', 'Permissão removida com sucesso.');
     }
 }
