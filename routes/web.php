@@ -21,12 +21,19 @@ Route::middleware('auth')->group(function () {
     Route::resource('permissions', PermissionController::class);
     Route::resource('users', UserController::class);
     Route::get('/setores-hospitalares', [ModuleController::class, 'setoresHospitalares'])
-    ->name('modules.setores-hospitalares');
+        ->middleware('permission:setores-hospitalares')
+        ->name('modules.setores-hospitalares');
+
     Route::get('/especialidades-medicas', [ModuleController::class, 'especialidadesMedicas'])
+        ->middleware('permission:especialidades-medicas')
         ->name('modules.especialidades-medicas');
+
     Route::get('/equipamentos', [ModuleController::class, 'equipamentos'])
+        ->middleware('permission:equipamentos')
         ->name('modules.equipamentos');
+
     Route::get('/unidades-assistenciais', [ModuleController::class, 'unidadesAssistenciais'])
+        ->middleware('permission:unidades-assistenciais')
         ->name('modules.unidades-assistenciais');
 });
 

@@ -13,8 +13,14 @@ class CheckPermission
      *
      * @param  Closure(Request): (Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, string $permission): Response
     {
+        $user = $request->user();
+
+        if (!$user || !$user->permissions()->where('slug', $permission)->exists()) {
+            abort(403, 'Você não tem permissão para acessar este módulo.');
+        }
+
         return $next($request);
     }
 }
