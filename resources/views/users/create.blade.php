@@ -84,7 +84,7 @@
                                     type="checkbox"
                                     name="permissions[]"
                                     value="{{ $permission->id }}"
-                                    @checked(in_array($permission->id, old('permissions', $userPermissions)))
+                                    @checked(in_array($permission->id, old('permissions', [])))
                                 >
 
                                 {{ $permission->name }}
