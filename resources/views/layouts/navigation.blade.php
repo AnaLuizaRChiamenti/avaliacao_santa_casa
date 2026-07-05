@@ -15,6 +15,42 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if (Auth::user()->role === 'admin')
+                        <x-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                            Usuários
+                        </x-nav-link>
+
+                        <x-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.*')">
+                            Permissões
+                        </x-nav-link>
+                    @endif
+
+                    @if (Auth::user()->role === 'colaborador')
+                        @if (Auth::user()->permissions()->where('slug', 'setores-hospitalares')->exists())
+                            <x-nav-link :href="route('modules.setores-hospitalares')" :active="request()->routeIs('modules.setores-hospitalares')">
+                                Setores Hospitalares
+                            </x-nav-link>
+                        @endif
+
+                        @if (Auth::user()->permissions()->where('slug', 'especialidades-medicas')->exists())
+                            <x-nav-link :href="route('modules.especialidades-medicas')" :active="request()->routeIs('modules.especialidades-medicas')">
+                                Especialidades Médicas
+                            </x-nav-link>
+                        @endif
+
+                        @if (Auth::user()->permissions()->where('slug', 'equipamentos')->exists())
+                            <x-nav-link :href="route('modules.equipamentos')" :active="request()->routeIs('modules.equipamentos')">
+                                Equipamentos
+                            </x-nav-link>
+                        @endif
+
+                        @if (Auth::user()->permissions()->where('slug', 'unidades-assistenciais')->exists())
+                            <x-nav-link :href="route('modules.unidades-assistenciais')" :active="request()->routeIs('modules.unidades-assistenciais')">
+                                Unidades Assistenciais
+                            </x-nav-link>
+                        @endif
+                    @endif
                 </div>
             </div>
 
@@ -70,6 +106,42 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @if (Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.*')">
+                    Usuários
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('permissions.index')" :active="request()->routeIs('permissions.*')">
+                    Permissões
+                </x-responsive-nav-link>
+            @endif
+
+            @if (Auth::user()->role === 'colaborador')
+                @if (Auth::user()->permissions()->where('slug', 'setores-hospitalares')->exists())
+                    <x-responsive-nav-link :href="route('modules.setores-hospitalares')" :active="request()->routeIs('modules.setores-hospitalares')">
+                        Setores Hospitalares
+                    </x-responsive-nav-link>
+                @endif
+
+                @if (Auth::user()->permissions()->where('slug', 'especialidades-medicas')->exists())
+                    <x-responsive-nav-link :href="route('modules.especialidades-medicas')" :active="request()->routeIs('modules.especialidades-medicas')">
+                        Especialidades Médicas
+                    </x-responsive-nav-link>
+                @endif
+
+                @if (Auth::user()->permissions()->where('slug', 'equipamentos')->exists())
+                    <x-responsive-nav-link :href="route('modules.equipamentos')" :active="request()->routeIs('modules.equipamentos')">
+                        Equipamentos
+                    </x-responsive-nav-link>
+                @endif
+
+                @if (Auth::user()->permissions()->where('slug', 'unidades-assistenciais')->exists())
+                    <x-responsive-nav-link :href="route('modules.unidades-assistenciais')" :active="request()->routeIs('modules.unidades-assistenciais')">
+                        Unidades Assistenciais
+                    </x-responsive-nav-link>
+                @endif
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
