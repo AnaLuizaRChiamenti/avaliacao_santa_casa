@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ModuleController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +20,14 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('permissions', PermissionController::class);
     Route::resource('users', UserController::class);
+    Route::get('/setores-hospitalares', [ModuleController::class, 'setoresHospitalares'])
+    ->name('modules.setores-hospitalares');
+    Route::get('/especialidades-medicas', [ModuleController::class, 'especialidadesMedicas'])
+        ->name('modules.especialidades-medicas');
+    Route::get('/equipamentos', [ModuleController::class, 'equipamentos'])
+        ->name('modules.equipamentos');
+    Route::get('/unidades-assistenciais', [ModuleController::class, 'unidadesAssistenciais'])
+        ->name('modules.unidades-assistenciais');
 });
 
 require __DIR__.'/auth.php';
