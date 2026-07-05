@@ -30,6 +30,7 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8'],
+            'role' => ['required', Rule::in(['admin', 'colaborador'])],
             'permissions' => ['array'],
             'permissions.*' => ['exists:permissions,id'],
         ]);
@@ -38,9 +39,14 @@ class UserController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
+            'role' => $data['role'],
         ]);
 
-        $user->permissions()->sync($data['permissions'] ?? []);
+        if ($data['role'] === 'colaborador') {
+            $user->permissions()->sync($data['permissions'] ?? []);
+        } else {
+            $user->permissions()->sync([]);
+        }
 
         return redirect()->route('users.index')->with('success', 'Usuário criado com sucesso.');
     }
@@ -59,23 +65,41 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8'],
+            'role' => ['required', Rule::in(['admin', 'colaborador'])],
             'permissions' => ['array'],
             'permissions.*' => ['exists:permissions,id'],
         ]);
+
+        if ($request->user()->id === $user->id && $data['role'] !== 'admin') {
+            return back()
+                ->withErrors(['role' => 'Você não pode alterar seu próprio perfil de administrador.'])
+                ->withInput();
+        }
 
         $user->update([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => $data['password'] ? Hash::make($data['password']) : $user->password,
+            'role' => $data['role'],
         ]);
 
-        $user->permissions()->sync($data['permissions'] ?? []);
+        if ($data['role'] === 'colaborador') {
+            $user->permissions()->sync($data['permissions'] ?? []);
+        } else {
+            $user->permissions()->sync([]);
+        }
 
         return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso.');
     }
 
     public function destroy(User $user)
     {
+        if (request()->user()->id === $user->id) {
+            return redirect()
+                ->route('users.index')
+                ->withErrors(['user' => 'Você não pode excluir o próprio usuário.']);
+        }
+
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'Usuário removido com sucesso.');

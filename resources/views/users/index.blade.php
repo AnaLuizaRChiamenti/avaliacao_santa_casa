@@ -35,13 +35,16 @@
                                 <td>
                                     <a href="{{ route('users.edit', $user) }}">Editar</a>
 
-                                    <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" onclick="return confirm('Deseja excluir este usuário?')">
-                                            Excluir
-                                        </button>
-                                    </form>
+                                    @if (Auth::id() !== $user->id)
+                                        <form action="{{ route('users.destroy', $user) }}" method="POST" style="display:inline">
+                                            @csrf
+                                            @method('DELETE')
+
+                                            <button type="submit" onclick="return confirm('Deseja excluir este usuário?')">
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach

@@ -9,7 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white shadow-sm rounded-lg p-6">
 
-                <form method="POST" action="{{ route('users.update', $user) }}">
+                <form method="POST" action="{{ route('users.update', $user) }}" x-data="{ role: '{{ old('role', $user->role) }}' }">
                     @csrf
                     @method('PUT')
 
@@ -32,8 +32,30 @@
                         @error('password') <p class="text-red-500 text-sm">{{ $message }}</p> @enderror
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block font-medium mb-2">Permissões</label>
+                    <div class="mb-4">
+                        <label class="block font-medium">Perfil</label>
+
+                        <select name="role" x-model="role" class="w-full rounded border-gray-300">                            <option value="colaborador" @selected(old('role', $user->role) === 'colaborador')>
+                                Colaborador
+                            </option>
+
+                            <option value="admin" @selected(old('role', $user->role) === 'admin')>
+                                Administrador
+                            </option>
+                        </select>
+
+                        @error('role')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-6" x-show="role === 'colaborador'">
+                        <label class="block font-medium mb-2">Permissões dos módulos</label>
+
+                        <p class="text-sm text-gray-500 mb-2">
+                            As permissões abaixo são utilizadas apenas para usuários colaboradores.
+                            Se este usuário for administrador, as permissões serão removidas ao salvar.
+                        </p>
 
                         @foreach($permissions as $permission)
                             <label class="block">
@@ -43,6 +65,7 @@
                                     value="{{ $permission->id }}"
                                     @checked(in_array($permission->id, old('permissions', $userPermissions)))
                                 >
+
                                 {{ $permission->name }}
                             </label>
                         @endforeach

@@ -53,24 +53,42 @@
                         @enderror
                     </div>
 
-                    <div class="mb-6">
-                        <label class="block font-medium mb-2">
-                            Permissões
-                        </label>
+                    <div class="mb-4">
+                        <label class="block font-medium">Perfil</label>
+
+                        <select name="role" class="w-full rounded border-gray-300" x-model="role">
+                            <option value="colaborador" @selected(old('role') === 'colaborador')>
+                                Colaborador
+                            </option>
+
+                            <option value="admin" @selected(old('role') === 'admin')>
+                                Administrador
+                            </option>
+                        </select>
+
+                        @error('role')
+                            <p class="text-red-500 text-sm">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div class="mb-6" x-show="role === 'colaborador'">
+                        <label class="block font-medium mb-2">Permissões dos módulos</label>
+
+                        <p class="text-sm text-gray-500 mb-2">
+                            Selecione quais módulos operacionais este colaborador poderá acessar.
+                        </p>
 
                         @foreach($permissions as $permission)
-
                             <label class="block">
-
                                 <input
                                     type="checkbox"
                                     name="permissions[]"
-                                    value="{{ $permission->id }}">
+                                    value="{{ $permission->id }}"
+                                    @checked(in_array($permission->id, old('permissions', $userPermissions)))
+                                >
 
                                 {{ $permission->name }}
-
                             </label>
-
                         @endforeach
                     </div>
 
