@@ -39,13 +39,6 @@
                            class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-50 transition">
                             Entrar
                         </a>
-
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}"
-                               class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition">
-                                Criar conta
-                            </a>
-                        @endif
                     @endauth
                 </div>
             </div>

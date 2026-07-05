@@ -67,12 +67,6 @@
                                 Lembrar acesso
                             </span>
                         </label>
-
-                        @if (Route::has('password.request'))
-                            <a class="text-sm text-blue-600 hover:text-blue-800" href="{{ route('password.request') }}">
-                                Esqueci minha senha
-                            </a>
-                        @endif
                     </div>
 
                     <div>
