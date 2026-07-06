@@ -16,8 +16,21 @@ O projeto foi desenvolvido como parte de uma avaliação técnica, seguindo os r
 - Tailwind CSS
 - Vite
 - Git
+- GitHub Actions
 
 ---
+
+---
+
+## Testes automatizados
+
+O projeto possui testes automatizados utilizando a estrutura padrão de testes do Laravel.
+
+Para executar os testes localmente, rode:
+
+```bash
+    php artisan test
+```
 
 ## Funcionalidades implementadas
 
