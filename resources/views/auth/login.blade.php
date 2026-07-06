@@ -3,8 +3,8 @@
         <div class="w-full max-w-md">
 
             <div class="text-center mb-8">
-                <div class="mx-auto h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
-                    <span class="text-blue-700 font-bold text-2xl">+</span>
+                <div class="mx-auto h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center mb-3">
+                    <span class="text-blue-700 font-bold text-lg">SC</span>
                 </div>
 
                 <h1 class="text-2xl font-bold text-gray-900">

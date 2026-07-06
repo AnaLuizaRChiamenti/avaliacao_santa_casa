@@ -10,7 +10,14 @@
         </div>
     </x-slot>
 
-    <div class="py-10 bg-gray-50 min-h-screen">
+    <div
+        class="py-10 bg-gray-50 min-h-screen"
+        x-data="{
+            showDeleteModal: false,
+            deletePermissionName: '',
+            deletePermissionUrl: ''
+        }"
+    >
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if (session('success'))
@@ -37,8 +44,10 @@
                     </p>
                 </div>
 
-                <a href="{{ route('permissions.create') }}"
-                   class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition">
+                <a
+                    href="{{ route('permissions.create') }}"
+                    class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition"
+                >
                     Nova permissão
                 </a>
             </div>
@@ -76,21 +85,24 @@
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-nowrap text-right">
-                                        <a href="{{ route('permissions.edit', $permission) }}"
-                                           class="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition">
+                                        <a
+                                            href="{{ route('permissions.edit', $permission) }}"
+                                            class="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 transition"
+                                        >
                                             Editar
                                         </a>
 
-                                        <form action="{{ route('permissions.destroy', $permission) }}" method="POST" class="inline">
-                                            @csrf
-                                            @method('DELETE')
-
-                                            <button type="submit"
-                                                    onclick="return confirm('Deseja excluir esta permissão?')"
-                                                    class="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 transition">
-                                                Excluir
-                                            </button>
-                                        </form>
+                                        <button
+                                            type="button"
+                                            class="inline-flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 transition"
+                                            x-on:click="
+                                                showDeleteModal = true;
+                                                deletePermissionName = '{{ addslashes($permission->name) }}';
+                                                deletePermissionUrl = '{{ route('permissions.destroy', $permission) }}';
+                                            "
+                                        >
+                                            Excluir
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -107,6 +119,54 @@
                 </div>
             </div>
 
+        </div>
+
+        <div
+            x-show="showDeleteModal"
+            x-cloak
+            class="fixed inset-0 z-50 flex items-center justify-center px-4"
+        >
+            <div
+                class="fixed inset-0 bg-gray-900 bg-opacity-50"
+                x-on:click="showDeleteModal = false"
+            ></div>
+
+            <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
+                <h3 class="text-lg font-semibold text-gray-900">
+                    Excluir permissão
+                </h3>
+
+                <p class="mt-2 text-sm text-gray-600">
+                    Deseja excluir a permissão
+                    <span class="font-semibold text-gray-900" x-text="deletePermissionName"></span>?
+                </p>
+
+                <p class="mt-2 text-sm text-gray-500">
+                    Essa ação não poderá ser desfeita. Usuários vinculados a essa permissão podem perder acesso ao módulo correspondente.
+                </p>
+
+                <div class="mt-6 flex justify-end gap-3">
+                    <button
+                        type="button"
+                        class="inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-200 transition"
+                        x-on:click="showDeleteModal = false"
+                    >
+                        Cancelar
+                    </button>
+
+                    <form method="POST" x-bind:action="deletePermissionUrl">
+                        @csrf
+                        @method('DELETE')
+
+                        <button
+                            type="submit"
+                            class="inline-flex items-center px-4 py-2 bg-red-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-700 transition"
+                        >
+                            Excluir permissão
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

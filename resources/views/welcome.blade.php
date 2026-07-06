@@ -15,7 +15,7 @@
             <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
                 <div class="flex items-center gap-3">
                     <div class="h-10 w-10 rounded-xl bg-blue-50 flex items-center justify-center">
-                        <span class="text-blue-700 font-bold text-xl">+</span>
+                        <span class="text-blue-700 font-bold text-lg">SC</span>
                     </div>
 
                     <div>

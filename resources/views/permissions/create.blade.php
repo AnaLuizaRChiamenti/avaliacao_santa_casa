@@ -12,6 +12,16 @@
 
     <div class="py-10 bg-gray-50 min-h-screen">
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
+
+            <div class="mb-4">
+                <a
+                    href="{{ route('permissions.index') }}"
+                    class="text-sm font-medium text-blue-600 hover:text-blue-800"
+                >
+                    ← Voltar para permissões
+                </a>
+            </div>
+
             <div class="bg-white border border-gray-100 shadow-sm rounded-xl overflow-hidden">
 
                 <div class="px-6 py-5 border-b border-gray-100">
@@ -23,7 +33,12 @@
                     </p>
                 </div>
 
-                <form method="POST" action="{{ route('permissions.store') }}" class="p-6 space-y-6">
+                <form
+                    method="POST"
+                    action="{{ route('permissions.store') }}"
+                    class="p-6 space-y-6"
+                    onkeydown="if (event.key === 'Enter') { event.preventDefault(); }"
+                >
                     @csrf
 
                     <div>
@@ -56,7 +71,7 @@
                             class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500">
 
                         <p class="text-sm text-gray-500 mt-1">
-                            Use letras minúsculas, sem espaços, separando palavras com hífen.
+                            Use apenas letras minúsculas, números e hífen. Não utilize espaços, acentos ou letras maiúsculas.
                         </p>
 
                         @error('slug')
@@ -71,14 +86,17 @@
                     </div>
 
                     <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100">
-                        <a href="{{ route('permissions.index') }}"
-                           class="inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-200 transition">
+                        <a
+                            href="{{ route('permissions.index') }}"
+                            class="inline-flex items-center px-4 py-2 bg-gray-100 border border-gray-200 rounded-lg font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-200 transition"
+                        >
                             Cancelar
                         </a>
 
                         <button
                             type="submit"
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition">
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-lg font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 transition"
+                        >
                             Salvar permissão
                         </button>
                     </div>

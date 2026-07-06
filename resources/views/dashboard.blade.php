@@ -22,9 +22,7 @@
             <div class="bg-white border border-gray-100 shadow-sm rounded-xl p-6 mb-6">
                 <div class="flex items-start gap-4">
                     <div class="h-12 w-12 rounded-xl bg-blue-50 flex items-center justify-center">
-                        <span class="text-blue-700 text-xl font-semibold">
-                            +
-                        </span>
+                        <span class="text-blue-700 font-bold text-lg">SC</span>
                     </div>
 
                     <div>

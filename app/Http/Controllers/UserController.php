@@ -27,12 +27,36 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8'],
-            'role' => ['required', Rule::in(['admin', 'colaborador'])],
-            'permissions' => ['array'],
-            'permissions.*' => ['exists:permissions,id'],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\s\'-]+$/u',
+            ],
+            'email' => [
+                'required',
+                'email:rfc',
+                'max:255',
+                'regex:/^[^@\s]+@[^@\s]+\.[^@\s]+$/',
+                'unique:users,email',
+            ],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
+            'role' => [
+                'required',
+                Rule::in(['admin', 'colaborador']),
+            ],
+            'permissions' => [
+                'required_if:role,colaborador',
+                'array',
+            ],
+            'permissions.*' => [
+                'exists:permissions,id',
+            ],
         ]);
 
         $user = User::create([
@@ -43,7 +67,7 @@ class UserController extends Controller
         ]);
 
         if ($data['role'] === 'colaborador') {
-            $user->permissions()->sync($data['permissions'] ?? []);
+            $user->permissions()->sync($data['permissions']);
         } else {
             $user->permissions()->sync([]);
         }
@@ -62,12 +86,36 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', Rule::unique('users', 'email')->ignore($user->id)],
-            'password' => ['nullable', 'string', 'min:8'],
-            'role' => ['required', Rule::in(['admin', 'colaborador'])],
-            'permissions' => ['array'],
-            'permissions.*' => ['exists:permissions,id'],
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                'regex:/^[\pL\s\'-]+$/u',
+            ],
+            'email' => [
+                'required',
+                'email:rfc',
+                'max:255',
+                'regex:/^[^@\s]+@[^@\s]+\.[^@\s]+$/',
+                Rule::unique('users', 'email')->ignore($user->id),
+            ],
+            'password' => [
+                'nullable',
+                'string',
+                'min:8',
+                'confirmed',
+            ],
+            'role' => [
+                'required',
+                Rule::in(['admin', 'colaborador']),
+            ],
+            'permissions' => [
+                'required_if:role,colaborador',
+                'array',
+            ],
+            'permissions.*' => [
+                'exists:permissions,id',
+            ],
         ]);
 
         if ($request->user()->id === $user->id && $data['role'] !== 'admin') {
@@ -84,7 +132,7 @@ class UserController extends Controller
         ]);
 
         if ($data['role'] === 'colaborador') {
-            $user->permissions()->sync($data['permissions'] ?? []);
+            $user->permissions()->sync($data['permissions']);
         } else {
             $user->permissions()->sync([]);
         }
