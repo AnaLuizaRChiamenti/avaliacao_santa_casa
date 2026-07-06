@@ -261,13 +261,32 @@ php artisan key:generate
 
 ### 6. Configurar o banco de dados
 
-Crie um banco MySQL/MariaDB com o nome:
+Antes de rodar as migrations, é necessário criar um banco MySQL/MariaDB para o projeto.
+
+O nome do banco utilizado neste projeto é:
 
 ```text
 avaliacao_santa_casa
 ```
 
-No arquivo `.env`, configure os dados do banco:
+#### Opção 1: Criar pelo phpMyAdmin usando XAMPP
+
+Se estiver usando XAMPP:
+
+1. Abra o **XAMPP Control Panel**.
+2. Inicie o **Apache**.
+3. Inicie o **MySQL**.
+4. Clique em **Admin** na linha do MySQL para abrir o phpMyAdmin.
+5. No phpMyAdmin, clique em **Novo**.
+6. No campo de nome da base de dados, informe:
+
+```text
+avaliacao_santa_casa
+```
+
+7. Clique em **Criar**.
+
+Depois, abra o arquivo `.env` e configure a conexão com o banco:
 
 ```env
 DB_CONNECTION=mysql
@@ -278,16 +297,41 @@ DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Ajuste `DB_USERNAME` e `DB_PASSWORD` conforme a configuração local do seu banco.
+No XAMPP, normalmente o usuário padrão é `root` e a senha fica vazia.
 
-Exemplo comum usando XAMPP:
+---
+
+#### Opção 2: Criar pelo terminal
+
+Se preferir criar o banco pelo terminal, execute:
+
+```bash
+mysql -u root -e "CREATE DATABASE avaliacao_santa_casa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+Caso o MySQL tenha senha, use:
+
+```bash
+mysql -u root -p -e "CREATE DATABASE avaliacao_santa_casa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+Depois, configure o `.env`:
 
 ```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=avaliacao_santa_casa
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
----
+Se o seu banco usar outro usuário ou senha, altere:
+
+```env
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
 
 ### 7. Rodar migrations e seeders
 
